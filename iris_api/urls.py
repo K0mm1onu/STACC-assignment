@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('flowers/', views.Plants.as_view(), name='flowers'),
+    path('flowers', views.FlowerSpecimen.as_view(), name='flowers'),
+    path('species', views.Species.as_view(), name='species'),
     path('init-data', views.InitData.as_view(), name='init-data')
 ]

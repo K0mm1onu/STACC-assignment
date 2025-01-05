@@ -2,7 +2,7 @@ import logging
 import requests
 
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, QueryDict
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,19 +13,38 @@ from rest_framework.renderers import JSONRenderer
 
 logger = logging.getLogger(__name__)
 CONTENT_TYPE_JSON = "application/json"
+DATASET_URL = "https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv"
 
 
-class Plants(APIView):
+class FlowerSpecimen(APIView):
 
-    def get(self, request, format = None) -> Response:
+    def get(self, request) -> Response:
         allSpecimens = PlantSpecimen.objects.all()
         serializer = PlantSpecimenSerializer(allSpecimens, many = True)
         return JsonResponse(serializer.data, status = status.HTTP_200_OK, safe = False)
+    
+    def post(self, request) -> Response:
+        serializer = PlantSpecimenSerializer(data = request.data)
 
+        if not serializer.is_valid():
+            return Response(status = status.HTTP_400_BAD_REQUEST)
+        
+        serializer.save(speciesId = serializer.initial_data["species"])
+
+        return Response(status = status.HTTP_201_CREATED)
+        
+
+class Species(APIView):
+
+    def get(self, request) -> Response:
+        """
+        Returns some statistic metrics for each of the Plant species
+        """
+        return JsonResponse({}, status = status.HTTP_200_OK, safe = False)
 
 class InitData(APIView):
 
-    def get(self, request, format = None) -> Response:
+    def get(self, request) -> Response:
         """
         Downloads the Iris dataset, replaces any existing data in the DB with it
         and removes outliers (flower specimen which have a measurement outside 
@@ -36,7 +55,7 @@ class InitData(APIView):
         # PlatSpecimen will be deleted because of the cascading deletion on the foreign key
         Species.objects.all().delete()
 
-        responseData = requests.get("https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv")
+        responseData = requests.get(DATASET_URL)
         dataString = responseData.text
         
         lines = dataString.split('\n')
