@@ -67,7 +67,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         'verbose': {  
-            'format': '[{levelname}]\t {asctime}\t {module}\t {message}',  
+            'format': '[{levelname}]\t {asctime} {module}\t {message}',  
             'style': '{',  
         },  
     },

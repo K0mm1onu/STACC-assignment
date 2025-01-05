@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from iris_flowers_api.models import *
 from iris_flowers_api.serializers import *
+from iris_flowers_api.util import *
 from rest_framework.renderers import JSONRenderer
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,11 @@ class Plants(APIView):
 class InitData(APIView):
 
     def get(self, request, format = None) -> Response:
+        """
+        Downloads the Iris dataset, replaces any existing data in the DB with it
+        and removes outliers (flower specimen which have a measurement outside 
+        3 standard deviations of its species' mean value)        
+        """
 
         # Delete all flower species and specimen from the database
         # PlatSpecimen will be deleted because of the cascading deletion on the foreign key
@@ -58,5 +64,9 @@ class InitData(APIView):
             )
 
             newSpecimen.save()
-        
+
+        # Remove all flower specimen with measurements outside 3 standard deviations
+        # of the species' mean
+        removeOutlyingFlowerSpecimen()
+
         return Response(status = status.HTTP_204_NO_CONTENT)

@@ -11,4 +11,4 @@ class PlantSpecimenSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlantSpecimen
-        fields = ['species', 'sepalLength', 'sepalWidth', 'petalLength', 'petalWidth']
+        fields = ['id', 'species', 'sepalLength', 'sepalWidth', 'petalLength', 'petalWidth']
