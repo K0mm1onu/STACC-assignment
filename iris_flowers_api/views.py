@@ -34,7 +34,7 @@ class FlowerSpecimen(APIView):
         return Response(status = status.HTTP_201_CREATED)
         
 
-class Species(APIView):
+class FlowerSpecies(APIView):
 
     def get(self, request) -> Response:
         """
