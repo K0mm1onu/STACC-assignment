@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# Configure rest_framework settings
 REST_FRAMEWORK = {
+    # Disable all authentication (not applicable to this project)
     'DEFAULT_AUTHENTICATION_CLASSES': [],
     'DEFAULT_PERMISSION_CLASSES': []
 }
@@ -58,6 +60,29 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'iris_api.urls'
+
+# Configure logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        'verbose': {  
+            'format': '[{levelname}]\t {asctime}\t {module}\t {message}',  
+            'style': '{',  
+        },  
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose"
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
+    },
+}
+
 
 TEMPLATES = [
     {

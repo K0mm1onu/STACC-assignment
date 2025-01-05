@@ -8,3 +8,4 @@ asgiref==3.8.1
 sqlparse==0.5.3
 python-dotenv==1.0.0
 markdown==3.7
+requests==2.32.3

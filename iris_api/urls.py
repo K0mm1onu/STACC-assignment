@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.urls import include, path
 from rest_framework import routers
+from iris_flowers_api import views
 
 router = routers.DefaultRouter()
 
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('flowers/', views.Plants.as_view(), name='flowers'),
+    path('init-data', views.InitData.as_view(), name='init-data')
 ]
