@@ -1,5 +1,4 @@
 #!/bin/bash
 
-python manage.py makemigrations
-
-python manage.py migrate
+python manage.py makemigrations\n
+python manage.py migrate\n
